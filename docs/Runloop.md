@@ -119,7 +119,7 @@
 
 - 当调用 NSObject 的 performSelecter:afterDelay: 后，实际上其内部会创建一个 Timer 并添加到当前线程的 RunLoop 中。所以如果当前线程没有 RunLoop，则这个方法会失效。
 
-- 当调用 performSelector:onThread: 时，实际上其会创建一个 Timer 加到对应的线程去，同样的，如果对应线程没有 RunLoop 该方法也会失效。
+- 当调用 performSelector:onThread: 时，实际上其会创建一个 Source0 加到对应的线程 RunLoop 中，并且只会添加到被标记为 common 的 mode 以及 commonModeItems 中，之后唤醒 RunLoop。当RunLoop 被唤醒后，Source0 对应的回调__NSThreadPerformPerform 会被执行，从而调用需要被执行的 Selector。同样的，如果对应线程没有 RunLoop ，或者 currentMode 不是 commonMode 该方法也会失效。 
 
 ## 8.PerformSelector:afterDelay:这个方法在子线程中是否起作用？
 
